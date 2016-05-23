@@ -1,0 +1,10 @@
+
+.line {
+	height:1px;
+	background:lightgrey;
+}
+
+.main-line {
+	height:2px;
+	background:lightgrey;
+}
