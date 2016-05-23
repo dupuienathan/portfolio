@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<title></title>
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/style.css" />
+		<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+		<script src="js/modernizr-custom-2.0.min.js"></script>
+		<script src="js/alchemy-client.js"></script>
+	</head>
+	<body>
+		Type here to sync with desktop: <input type="text" id="sync" />
+		<span id="test"></span>
+	</body>
+	<script>
+		client = new Alchemy({
+			Server: "127.0.0.1",
+			Port: 1054,
+			Action: "test",
+			DebugMode: false
+		});
+		
+		client.Start();
+		
+		client.Connected = function() {
+			console.log("Connected");
+		};
+		
+		client.Disconnected = function() {
+			console.log("Disconnected");			
+		};
+		
+		client.MessageReceived = function(event) {
+			parse(event.data);
+			
+		};
+		
+		$(function() {
+			$("#sync").change(function() {
+				var val = $("#sync").val();
+				var msg = {
+					Type: 0,
+					Message: val
+				};
+				client.Send(msg);
+			});
+		});
+		
+		function parse(message) {
+			var data = JSON.parse(message);
+			switch(data.Type) {
+				case 0:
+					$("#sync").val(data.Message);
+					break;
+			}
+		}
+	</script>
+</html>
